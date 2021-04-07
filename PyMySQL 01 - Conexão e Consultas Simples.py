@@ -11,11 +11,10 @@ with con.cursor() as c:
     res = c.fetchone()
     print(res)
     # Acessar dado pelo nome da coluna
-    print('Livro retornado:', res['NomeLivro'])
-
-print()
-with con.cursor() as c:
-    # Retornar todas as linhas da tabela de editoras
+    print('\nLivro retornado:', res['NomeLivro'])
+    print()
+    
+    # Outra cosulta: Retornar todas as linhas da tabela de editoras
     sql = "SELECT NomeEditora FROM tbl_editoras"
     c.execute(sql)
     res = c.fetchall()
