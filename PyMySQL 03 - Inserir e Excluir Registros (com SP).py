@@ -1,10 +1,21 @@
-import pymysql
+# This is a sample Python script.
 
+# Press Shift+F10 to execute it or replace it with your code.
+# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import pymysql
+import getpass
 
 # Criar objeto para conexão ao banco de dados
-con = pymysql.connect(host='localhost', user='root', cursorclass=pymysql.cursors.DictCursor, password='abc123**', database='db_meuslivros')
+#con = pymysql.connect(host='localhost', user='root', cursorclass=pymysql.cursors.DictCursor, password='abc123**', database='db_meuslivros')
 
 if __name__ == '__main__':
+
+    # Criar objeto para conexão ao banco de dados pedindo senha ao usuário
+    #print('Digite a senha para conexão ao banco de dados:')
+    senha = getpass.getpass('Digite a senha para conexão ao banco de dados:')
+    con = pymysql.connect(host='localhost', user='root', cursorclass=pymysql.cursors.DictCursor,
+                          database='db_meuslivros', password=senha)
+
     with con.cursor() as c:
         # Consulta a ser realizada:
         sql = 'SELECT NomeLivro, ISBN13 FROM tbl_Livros WHERE IDLivro = 4'
