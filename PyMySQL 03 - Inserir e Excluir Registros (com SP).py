@@ -5,9 +5,6 @@
 import pymysql
 import getpass
 
-# Criar objeto para conexão ao banco de dados
-#con = pymysql.connect(host='localhost', user='root', cursorclass=pymysql.cursors.DictCursor, password='abc123**', database='db_meuslivros')
-
 if __name__ == '__main__':
 
     # Criar objeto para conexão ao banco de dados pedindo senha ao usuário
@@ -29,7 +26,7 @@ if __name__ == '__main__':
     # Inserir um registro na tabela de assuntos
     assunto = input('Digite o assunto a cadastrar e pressione enter: ')
     with con.cursor() as cur:
-        sql = "INSERT INTO tbl_assuntos (Assunto) VALUES " + "('" + assunto + "');"
+        sql = "INSERT INTO tbl_assuntos (Assunto) VALUES ('" + assunto + "');"
         cur.execute(sql)
         con.commit()
         cur.close()
