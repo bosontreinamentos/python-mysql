@@ -10,42 +10,26 @@ def clicar_botao():
 
 if __name__=="__main__":
 
-        # Preparar um cursor com o método .cursor()
+    # Preparar um cursor com o método .cursor()
     with con.cursor() as c:
         # Criar a consulta e executá-la no banco
-        sql = "SELECT NomeLivro, ISBN13 FROM tbl_livros WHERE IdLivro = 104"
-        c.execute(sql)
-        res = c.fetchone() # Método fetchone(): retorna uma linha da tabela
-        print(res)
-        # Acessar o dado retornado pelo nome da coluna
-        print('\nLivro retornado:', res['NomeLivro'])
-        print()
-        # Outra consulta (ainda usando o mesmo cursor): Retornar todas as linhas da tabela de editoras
         sql = "SELECT NomeEditora FROM tbl_editoras"
         c.execute(sql)
-        res = c.fetchall() # Método fetchall(): retorna todas as linhas obtidas pela consulta na tabela
-        print(res)
-        print()
-        # Mostrar os dados retornados, um por linha, iterando sobre o resultado:
+        res = c.fetchall()
+        # Criar lista com os dados retornados
+        listaEditoras = []
         for linha in res:
-            print(linha['NomeEditora'])
+            listaEditoras.append(linha['NomeEditora'])
     # Desconectar do servidor
     con.close()
 
-    
     app = QApplication([])
     app.setStyle('Fusion')
     janela = QWidget()
     janela.setWindowTitle('Teste de Qt para Bóson')
     #janela.setGeometry(300,100,350,150)
     janela.resize(400,400)
-    layout = QVBoxLayout()
-    layout.addWidget(QPushButton('Top'))
-    layout.addWidget(QPushButton('Bottom'))
-    #layout.addWidget(QLabel('Bóson Treinamentos!'))
-
-    label = QLabel('Bóson Treinamentos!')
-    layout.addWidget(label)
+    layout = QHBoxLayout()
 
     # Botão que abre caixa de alerta:
     botao = QPushButton('Clique Aqui')
@@ -53,11 +37,13 @@ if __name__=="__main__":
     botao.clicked.connect(clicar_botao)
     botao.show()
 
-    # ComboBox:
-    frutas = ['Abacate','Morango','Melancia','Kiwi','Maçã','Caju']
-    cmbFrutas = QComboBox()
-    cmbFrutas.addItems(frutas)
-    layout.addWidget(cmbFrutas)
+    label = QLabel('Lista de Editoras:')
+    layout.addWidget(label)
+    
+    # ComboBox do banco de dados:
+    cmbEditoras = QComboBox()
+    cmbEditoras.addItems(listaEditoras)
+    layout.addWidget(cmbEditoras)
 
     janela.setLayout(layout)
     janela.show()
