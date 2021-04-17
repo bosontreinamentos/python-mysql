@@ -6,11 +6,15 @@ def conectaBanco():
     global con
     con = pymysql.connect(host='localhost',user='root',database='db_MeusLivros',cursorclass=pymysql.cursors.DictCursor,password='abc123**')
     
-
 def clicar_botao():
     alert = QMessageBox()
     alert.setText('Bóson Treinamentos!')
     alert.exec()
+
+def msg_problema_BD():
+    msg_problema = QMessageBox()
+    msg_problema.setText('Problema ao obter os dados. Tente novamente.')
+    msg_problema.exec()
 
 if __name__=="__main__":
 
@@ -57,15 +61,18 @@ if __name__=="__main__":
     botaoLivro = QPushButton('Pesquisar Livro')
 
     def consulta_livro():
-        conectaBanco()
-        nomeLivro = ''
-        IdLivro = txtIdLivro.text()
-        with con.cursor() as c:
-            sql = "SELECT NomeLivro FROM tbl_livros WHERE IdLivro = " + IdLivro + ";"
-            c.execute(sql)
-            res = c.fetchone()
-            txtNomeLivro.setText(res['NomeLivro'])
-        con.close()
+        try:
+            conectaBanco()
+            IdLivro = txtIdLivro.text()
+            with con.cursor() as c:
+                sql = "SELECT NomeLivro FROM tbl_livros WHERE IdLivro = " + IdLivro + ";"
+                c.execute(sql)
+                res = c.fetchone()
+                txtNomeLivro.setText(res['NomeLivro'])
+        except Exception:
+            msg_problema_BD()
+        finally:
+            con.close()
 
     layout.addWidget(labelLivros)
     layout.addWidget(txtIdLivro)    
@@ -74,9 +81,6 @@ if __name__=="__main__":
     botaoLivro.clicked.connect(consulta_livro)
     botaoLivro.show()
     
-    
-  
-
     janela.setLayout(layout)
     janela.show()
 
