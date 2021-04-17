@@ -1,7 +1,11 @@
 from PyQt5.QtWidgets import *
 import pymysql
 
-con = pymysql.connect(host='localhost',user='root',database='db_MeusLivros',cursorclass=pymysql.cursors.DictCursor,password='abc123**')
+
+def conectaBanco():
+    global con
+    con = pymysql.connect(host='localhost',user='root',database='db_MeusLivros',cursorclass=pymysql.cursors.DictCursor,password='abc123**')
+    
 
 def clicar_botao():
     alert = QMessageBox()
@@ -11,6 +15,7 @@ def clicar_botao():
 if __name__=="__main__":
 
     # Preparar um cursor com o método .cursor()
+    conectaBanco()
     with con.cursor() as c:
         # Criar a consulta e executá-la no banco
         sql = "SELECT NomeEditora FROM tbl_editoras"
@@ -29,7 +34,7 @@ if __name__=="__main__":
     janela.setWindowTitle('Teste de Qt para Bóson')
     #janela.setGeometry(300,100,350,150)
     janela.resize(400,400)
-    layout = QHBoxLayout()
+    layout = QVBoxLayout()
 
     # Botão que abre caixa de alerta:
     botao = QPushButton('Clique Aqui')
@@ -44,6 +49,33 @@ if __name__=="__main__":
     cmbEditoras = QComboBox()
     cmbEditoras.addItems(listaEditoras)
     layout.addWidget(cmbEditoras)
+
+    # Pesquisa de Livros por ID
+    labelLivros = QLabel('Digite o código do livro a pesquisar:')
+    txtIdLivro = QLineEdit()
+    txtNomeLivro = QLineEdit()
+    botaoLivro = QPushButton('Pesquisar Livro')
+
+    def consulta_livro():
+        conectaBanco()
+        nomeLivro = ''
+        IdLivro = txtIdLivro.text()
+        with con.cursor() as c:
+            sql = "SELECT NomeLivro FROM tbl_livros WHERE IdLivro = " + IdLivro + ";"
+            c.execute(sql)
+            res = c.fetchone()
+            txtNomeLivro.setText(res['NomeLivro'])
+        con.close()
+
+    layout.addWidget(labelLivros)
+    layout.addWidget(txtIdLivro)    
+    layout.addWidget(botaoLivro)
+    layout.addWidget(txtNomeLivro)
+    botaoLivro.clicked.connect(consulta_livro)
+    botaoLivro.show()
+    
+    
+  
 
     janela.setLayout(layout)
     janela.show()
