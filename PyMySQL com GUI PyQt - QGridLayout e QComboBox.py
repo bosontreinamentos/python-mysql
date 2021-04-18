@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import *
+from PyQt5 import QtCore
 import pymysql
+import sys
 
 
 def conectaBanco():
@@ -36,25 +38,35 @@ if __name__=="__main__":
 
     app = QApplication([])
     app.setStyle('Fusion')
-    janela = QWidget()
-    janela.setWindowTitle('Teste de Qt para Bóson')
-    #janela.setGeometry(300,100,350,150)
-    janela.resize(400,400)
-    layout = QVBoxLayout()
+    
+    layout = QGridLayout()
+
+    # Margens esquerda, acima, direita, abaixo:
+    layout.setContentsMargins(50,0,20,10)
+    # Espaçamento entre elementos:
+    layout.setSpacing(10)
+
 
     # Botão que abre caixa de alerta:
     botao = QPushButton('Clique Aqui')
-    layout.addWidget(botao)
+    layout.addWidget(botao,0,0)
     botao.clicked.connect(clicar_botao)
     botao.show()
 
     label = QLabel('Lista de Editoras:')
-    layout.addWidget(label)
+    layout.addWidget(label,1,0)
     
     # ComboBox do banco de dados:
     cmbEditoras = QComboBox()
     cmbEditoras.addItems(listaEditoras)
-    layout.addWidget(cmbEditoras)
+    layout.addWidget(cmbEditoras,2,0)
+
+    # Caixa de texto para mostrar item selecionado no ComboBox
+    txtEditora = QLineEdit()
+    layout.addWidget(txtEditora,3,0)
+    def informaEditora():
+        txtEditora.setText(cmbEditoras.currentText())
+    cmbEditoras.activated.connect(informaEditora)
 
     # Pesquisa de Livros por ID
     labelLivros = QLabel('Digite o código do livro a pesquisar:')
@@ -76,14 +88,20 @@ if __name__=="__main__":
         finally:
             con.close()
 
-    layout.addWidget(labelLivros)
-    layout.addWidget(txtIdLivro)    
-    layout.addWidget(botaoLivro)
-    layout.addWidget(txtNomeLivro)
+    layout.addWidget(labelLivros,0,1)
+    layout.addWidget(txtIdLivro,1,1)    
+    layout.addWidget(botaoLivro,2,1)
+    layout.addWidget(txtNomeLivro,3,1)
     botaoLivro.clicked.connect(consulta_livro)
     botaoLivro.show()
     
+    janela = QWidget()
+    janela.setWindowTitle('Teste de Qt para Bóson')
+    #janela.setGeometry(300,100,350,150)
+    janela.resize(400,200) # largura, altura
     janela.setLayout(layout)
     janela.show()
 
-    app.exec_()
+    sys.exit(app.exec_())
+
+    

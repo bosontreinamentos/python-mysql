@@ -36,25 +36,33 @@ if __name__=="__main__":
 
     app = QApplication([])
     app.setStyle('Fusion')
-    janela = QWidget()
-    janela.setWindowTitle('Teste de Qt para Bóson')
-    #janela.setGeometry(300,100,350,150)
-    janela.resize(400,400)
-    layout = QVBoxLayout()
+    
+    layout = QHBoxLayout()
+    layout2 = QVBoxLayout()
+    layout3 = QVBoxLayout()
+
+
+    # Margens esquerda, acima, direita, abaixo:
+    layout2.setContentsMargins(50,0,20,10)
+    # Espaçamento entre elementos:
+    layout2.setSpacing(20)
+
+    layout.addLayout(layout2)
+    layout.addLayout(layout3)
 
     # Botão que abre caixa de alerta:
     botao = QPushButton('Clique Aqui')
-    layout.addWidget(botao)
+    layout3.addWidget(botao)
     botao.clicked.connect(clicar_botao)
     botao.show()
 
     label = QLabel('Lista de Editoras:')
-    layout.addWidget(label)
+    layout3.addWidget(label)
     
     # ComboBox do banco de dados:
     cmbEditoras = QComboBox()
     cmbEditoras.addItems(listaEditoras)
-    layout.addWidget(cmbEditoras)
+    layout2.addWidget(cmbEditoras)
 
     # Pesquisa de Livros por ID
     labelLivros = QLabel('Digite o código do livro a pesquisar:')
@@ -76,13 +84,17 @@ if __name__=="__main__":
         finally:
             con.close()
 
-    layout.addWidget(labelLivros)
-    layout.addWidget(txtIdLivro)    
-    layout.addWidget(botaoLivro)
-    layout.addWidget(txtNomeLivro)
+    layout2.addWidget(labelLivros)
+    layout2.addWidget(txtIdLivro)    
+    layout2.addWidget(botaoLivro)
+    layout2.addWidget(txtNomeLivro)
     botaoLivro.clicked.connect(consulta_livro)
     botaoLivro.show()
     
+    janela = QWidget()
+    janela.setWindowTitle('Teste de Qt para Bóson')
+    #janela.setGeometry(300,100,350,150)
+    janela.resize(400,400)
     janela.setLayout(layout)
     janela.show()
 
