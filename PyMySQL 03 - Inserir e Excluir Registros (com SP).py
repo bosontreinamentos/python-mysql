@@ -49,6 +49,7 @@ if __name__ == '__main__':
         print('ID do Assunto: {}'.format(res['IdAssunto']))
     # 2. Executar a rotina de exclusão:
         #sql = "DELETE FROM tbl_assuntos WHERE IdAssunto =  " + "'" + str(res['IdAssunto']) + "';"
+        #sql = "DELETE FROM tbl_assuntos WHERE IdAssunto =  " + str(res['IdAssunto']) + ";" #sem usar aspas no idAssunto, pois é número
         sql = "call sp_del_assunto(" + str(res['IdAssunto']) + ");" # usando stored procedure
         cur.execute(sql)
         con.commit()
