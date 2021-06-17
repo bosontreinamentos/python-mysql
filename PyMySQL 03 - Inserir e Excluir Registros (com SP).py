@@ -39,13 +39,14 @@ if __name__ == '__main__':
     # Excluir um registro da tabela de assuntos
     
     # 1. Descobrir o ID a excluir:
-    assunto = input('Digite o assunto a excluir e pressione enter: ')
+    print('Digite o assunto a excluir e pressione enter:')
+    assunto = input()
     with con.cursor() as cur:
         # Retornar todas as linhas da tabela de assuntos
         sql = "SELECT IdAssunto FROM tbl_assuntos WHERE Assunto = " + "'" + assunto + "';"
         cur.execute(sql)
         res = cur.fetchone()
-        print('ID do Assunto:', res['IdAssunto'])
+        print('ID do Assunto: {}'.format(res['IdAssunto']))
     # 2. Executar a rotina de exclusão:
         #sql = "DELETE FROM tbl_assuntos WHERE IdAssunto =  " + "'" + str(res['IdAssunto']) + "';"
         sql = "call sp_del_assunto(" + str(res['IdAssunto']) + ");" # usando stored procedure
